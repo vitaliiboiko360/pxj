@@ -32,6 +32,9 @@ import { Application, Assets, Sprite, Graphics, Ticker } from 'pixi.js';
   bunny.position.set(app.screen.width / 2, app.screen.height / 2);
   unocard.position.set(app.screen.width / 4, app.screen.height / 4);
 
+  const center_x = app.screen.width / 2;
+  const center_y = app.screen.height / 2;
+
   // Add the bunny to the stage
   app.stage.addChildAt(bunny, 0);
   app.stage.addChildAt(unocard, 1);
@@ -57,17 +60,24 @@ import { Application, Assets, Sprite, Graphics, Ticker } from 'pixi.js';
         isStarted.stop();
         return;
       }
+      const radius = 200;
+      let angle = 0;
       isStarted = app.ticker.add((time) => {
         // Just for fun, let's rotate mr rabbit a little.
         // * Delta is 1 if running at 100% performance *
         // * Creates frame-independent transformation *
-        const p0 = unocard.position;
-        if (p0._x > app.screen.width / 2 && p0._y > app.screen.height / 2) {
-          unocard.position.set(app.screen.width / 4, app.screen.height / 4);
-        }
+
         bunny.rotation += 0.1 * time.deltaTime;
+
         unocard.rotation += 0.025 * time.deltaTime;
-        unocard.position.set(p0._x + 1, p0._y + 1);
+
+        angle = (angle + 0.01) % (Math.PI * 2);
+
+        unocard.position.set(
+          center_x + Math.cos(angle) * radius,
+          center_y + Math.sin(angle) * radius
+        );
+
         const p = unocard.position;
         sq.position.set(p._x - 5, p._y - 5);
       });
