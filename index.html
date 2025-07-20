@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>PixiJS - Template</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "@material/web/": "https://esm.run/@material/web/"
+        }
+      }
+    </script>
+    <script type="module">
+      import '@material/web/all.js';
+      import { styles as typescaleStyles } from '@material/web/typography/md-typescale-styles.js';
+
+      document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+    <script type="module" src="/script.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="pixi-container"></div>
+    </div>
+    <div id="controls">
+      <div>
+        <md-outlined-text-field label="P1.x" value="Value" type="number">
+        </md-outlined-text-field>
+        <md-outlined-text-field label="P1.y" value="Value" type="number">
+        </md-outlined-text-field>
+      </div>
+      <div>
+        <md-outlined-text-field label="P2.x" value="Value" type="number">
+        </md-outlined-text-field>
+        <md-outlined-text-field label="P2.y" value="Value" type="number">
+        </md-outlined-text-field>
+      </div>
+      <div>
+        <md-outlined-text-field label="P3.x" value="Value" type="number">
+        </md-outlined-text-field>
+        <md-outlined-text-field label="P3.y" value="Value" type="number">
+        </md-outlined-text-field>
+      </div>
+      <div>
+        <md-outlined-text-field label="P4.x" value="Value" type="number">
+        </md-outlined-text-field>
+        <md-outlined-text-field label="P4.y" value="Value" type="number">
+        </md-outlined-text-field>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
