@@ -10,27 +10,11 @@ import {
   Point,
 } from 'pixi.js';
 
-function makePoint(): Point {
-  return new Point(0, 0);
-}
-
-function makeControls(p1) {
-  const divElement = document.createElement('div');
-  divElement.setAttribute('draggable', 'true');
-
-  const inputElement = document.createElement('input');
-  inputElement.setAttribute('type', 'number');
-  inputElement.setAttribute('id', 'p1_x');
-  // inputElement.setAttribute('name', 'x1');
-  // inputElement.setAttribute('readonly', 'false');
-  inputElement.setAttribute('value', 'value');
-  inputElement.style.width = '60px';
-  inputElement.addEventListener('input', (e) => {
-    inputElement.value = 1;
-  });
-  divElement.appendChild(inputElement);
-
-  document.getElementById('pixi-container')!.appendChild(divElement);
+function makePoint(x, y): Point {
+  if (x == undefined || y == undefined) {
+    return new Point(0, 0);
+  }
+  return new Point(x, y);
 }
 
 (async () => {
@@ -98,11 +82,10 @@ function makeControls(p1) {
   // app.stage.addChildAt(mesh, 2);
 
   // add controls
-  const p1 = makePoint();
-  const p2 = makePoint();
-  const p3 = makePoint();
-  const p4 = makePoint();
-
+  const p1 = makePoint(100, 100);
+  const p2 = makePoint(400, 130);
+  const p3 = makePoint(280, 450);
+  const p4 = makePoint(30, 380);
   const mesh3 = new PerspectiveMesh({
     texture: textureCard,
     verticesX: 20,
@@ -116,6 +99,79 @@ function makeControls(p1) {
     x3: 30,
     y3: 380,
   });
+
+  const updateMesh = () =>
+    mesh3.setCorners(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+  const divElement = document.getElementById('controls');
+  divElement.querySelectorAll('md-outlined-text-field').forEach((el) => {
+    console.log(el);
+
+    if (el.label == 'P1.x') {
+      el.setAttribute('value', p1.x);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p1.x = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P1.y') {
+      el.setAttribute('value', p1.y);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p1.y = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P2.x') {
+      el.setAttribute('value', p2.x);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p2.x = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P2.y') {
+      el.setAttribute('value', p2.y);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p2.y = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P3.x') {
+      el.setAttribute('value', p3.x);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p3.x = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P3.y') {
+      el.setAttribute('value', p3.y);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p3.y = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P4.x') {
+      el.setAttribute('value', p4.x);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p4.x = event.target.value;
+        updateMesh();
+      });
+    }
+    if (el.label == 'P4.y') {
+      el.setAttribute('value', p4.y);
+      el.addEventListener('input', (event) => {
+        console.log(event.target.value);
+        p4.y = event.target.value;
+        updateMesh();
+      });
+    }
+  });
+
   app.stage.addChild(mesh3);
   app.ticker.add((time) => {
     bunny.rotation += 0.1 * time.deltaTime;

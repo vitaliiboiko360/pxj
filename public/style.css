@@ -22,3 +22,7 @@ body {
   background-color: white;
   padding: 1rem;
 }
+
+#controls > div {
+  margin-bottom: 0.4rem;
+}
