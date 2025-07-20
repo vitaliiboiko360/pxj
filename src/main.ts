@@ -101,12 +101,20 @@ let center_x = window.innerWidth / 2;
 let center_y = window.innerHeight / 2;
 
 window.addEventListener('resize', () => {
-  center_x = window.innerWidth / 2;
-  center_y = window.innerHeight / 2;
+  center_x =
+    Math.max(document.documentElement.clientWidth, window.innerWidth || 0) / 2;
+  center_y =
+    Math.max(document.documentElement.clientHeight, window.innerHeight || 0) /
+    2;
 
   if (window.pixi.isInitialized) {
+    window.pixi.app.resize();
     window.pixi.centerCat();
   }
 });
 
 window.pixi = new PixiAnimator();
+
+import { playGround } from './playGround';
+
+playGround();
