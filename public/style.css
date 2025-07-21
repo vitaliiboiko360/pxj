@@ -18,7 +18,7 @@ body {
   position: absolute;
   left: 1200px;
   top: 500px;
-  width: 600px;
+  max-width: 600px;
   background-color: white;
   padding: 1rem;
 }
@@ -29,4 +29,5 @@ body {
 
 #startButton {
   margin-left: 1rem;
+  margin-bottom: 1rem;
 }
