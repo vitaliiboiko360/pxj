@@ -26,3 +26,7 @@ body {
 #controls > div {
   margin-bottom: 0.4rem;
 }
+
+#startButton {
+  margin-left: 1rem;
+}
