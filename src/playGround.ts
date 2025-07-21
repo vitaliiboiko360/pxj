@@ -307,47 +307,92 @@ export const playGround = async () => {
   app.stage.addChild(mesh4);
   app.stage.addChild(mesh3);
 
-  app.ticker.add((time) => {
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
+  // app.ticker.add((time) => {
+  //   bunny.rotation += 0.1 * time.deltaTime;
+  // });
 
   app.stage.addChild(unoCard);
   const startPoint = new Point(center_x - 480, center_y - 90);
-  const endPoint = new Point(center_x, center_y + 200);
-
-  const deltaX = Math.abs(startPoint.x - endPoint.x);
-  const deltaY = Math.abs(startPoint.y - endPoint.y);
   let ticker;
+  let endPoint = new Point(bunny.position._x, bunny.position._y);
   function hanleStart() {
+    const deltaX = Math.abs(endPoint.x - startPoint.x);
+    const deltaY = Math.abs(endPoint.y - startPoint.y);
     unoCard.position.set(startPoint.x, startPoint.y);
 
     unoCard.rotation = 0;
     let deltaElapsed;
-    if (ticker) {
-      ticker.start();
-      return;
-    }
+    // if (ticker) {
+    //   ticker.start();
+    //   return;
+    // }
     ticker = new Ticker();
     ticker.add((ticker) => {
       const currentPoint = unoCard.position;
-      if (currentPoint.x > endPoint.x || currentPoint.y > endPoint.y) {
+      if (
+        Math.abs(currentPoint.x - startPoint.x) > deltaX ||
+        Math.abs(currentPoint.y - startPoint.y) > deltaY
+      ) {
         ticker.stop();
+        unoCard.rotation = 0;
         return;
       }
-      if ((deltaElapsed += ticker.deltaTime) < 1) {
+      if ((deltaElapsed += ticker.deltaTime) < 0.8) {
         return;
       }
       deltaElapsed = 0;
       unoCard.position.set(
-        currentPoint.x + deltaX / 110,
-        currentPoint.y + deltaY / 110
+        startPoint.x > endPoint.x
+          ? currentPoint.x - deltaX / 50
+          : currentPoint.x + deltaX / 50,
+        startPoint.y > endPoint.y
+          ? currentPoint.y - deltaY / 50
+          : currentPoint.y + deltaY / 50
       );
-      unoCard.rotation += (Math.PI * 2) / 110;
+      unoCard.rotation += (Math.PI * 2) / 50;
     });
+    ticker.start();
   }
 
   const startButton = document.getElementById('startButton');
   startButton?.addEventListener('click', (event) => {
     hanleStart();
   });
+
+  app.stage.addChild(bunny);
+  let dragTarget = null;
+
+  app.stage.eventMode = 'static';
+  app.stage.hitArea = app.screen;
+  app.stage.on('pointerup', onDragEnd);
+  app.stage.on('pointerupoutside', onDragEnd);
+
+  function onDragMove(event) {
+    if (dragTarget) {
+      dragTarget.parent.toLocal(event.global, null, dragTarget.position);
+    }
+  }
+
+  function onDragStart() {
+    // Store a reference to the data
+    // * The reason for this is because of multitouch *
+    // * We want to track the movement of this particular touch *
+    this.alpha = 0.5;
+    dragTarget = this;
+    app.stage.on('pointermove', onDragMove);
+  }
+
+  function onDragEnd() {
+    if (dragTarget) {
+      app.stage.off('pointermove', onDragMove);
+      dragTarget.alpha = 1;
+      dragTarget = null;
+      endPoint = new Point(bunny.position.x, bunny.position.y);
+      console.log(`x == ${endPoint.x}  y == ${endPoint.y}`);
+    }
+  }
+
+  bunny.eventMode = 'static';
+  bunny.cursor = 'pointer';
+  bunny.on('pointerdown', onDragStart, bunny);
 };
