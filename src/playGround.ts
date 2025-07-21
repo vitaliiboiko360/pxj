@@ -8,6 +8,7 @@ import {
   MeshSimple,
   PerspectiveMesh,
   Point,
+  Ticker,
 } from 'pixi.js';
 
 function makePoint(x, y): Point {
@@ -16,6 +17,9 @@ function makePoint(x, y): Point {
   }
   return new Point(x, y);
 }
+
+const center_x = window.innerWidth / 2;
+const center_y = window.innerHeight / 2;
 
 export const playGround = async () => {
   const app = new Application();
@@ -302,7 +306,48 @@ export const playGround = async () => {
   app.stage.addChild(mesh5);
   app.stage.addChild(mesh4);
   app.stage.addChild(mesh3);
+
   app.ticker.add((time) => {
     bunny.rotation += 0.1 * time.deltaTime;
+  });
+
+  app.stage.addChild(unoCard);
+  const startPoint = new Point(center_x - 480, center_y - 90);
+  const endPoint = new Point(center_x, center_y + 200);
+
+  const deltaX = Math.abs(startPoint.x - endPoint.x);
+  const deltaY = Math.abs(startPoint.y - endPoint.y);
+  let ticker;
+  function hanleStart() {
+    unoCard.position.set(startPoint.x, startPoint.y);
+
+    unoCard.rotation = 0;
+    let deltaElapsed;
+    if (ticker) {
+      ticker.start();
+      return;
+    }
+    ticker = new Ticker();
+    ticker.add((ticker) => {
+      const currentPoint = unoCard.position;
+      if (currentPoint.x > endPoint.x || currentPoint.y > endPoint.y) {
+        ticker.stop();
+        return;
+      }
+      if ((deltaElapsed += ticker.deltaTime) < 1) {
+        return;
+      }
+      deltaElapsed = 0;
+      unoCard.position.set(
+        currentPoint.x + deltaX / 110,
+        currentPoint.y + deltaY / 110
+      );
+      unoCard.rotation += (Math.PI * 2) / 110;
+    });
+  }
+
+  const startButton = document.getElementById('startButton');
+  startButton?.addEventListener('click', (event) => {
+    hanleStart();
   });
 };
